@@ -1,0 +1,45 @@
+{% extends "_layouts/cp" %}
+
+{% set title = 'Recent Logins' %}
+{% set selectedSubnavItem = 'requests' %}
+
+{% set content %}
+  {# Create a user query with the 'group' parameter #}
+  {% set myUserQuery = craft.users()
+    .status(['active', 'locked', 'suspended', 'pending'])
+    .orderBy('lastLoginDate desc')
+  %}
+
+  {# Fetch the users #}
+  {% set users = myUserQuery.all() %}
+
+  {% if users | length %}
+      <table class="data fullwidth">
+          <thead>
+              <tr>
+                  <th scope="col">{{ "Email" | t('useractivity') }}</th>
+                  <th scope="col">{{ "Name" | t('useractivity') }}</th>
+                  <th scope="col">{{ "Last Login" | t('useractivity') }}</th>
+              </tr>
+          </thead>
+
+          <tbody>
+              {% for user in users %}
+              <tr>
+                  <td class="col-label" data-title="{{ 'Email' | t('useractivity') }}">
+                      <a href="{{ url('/admin/users/'~user.id) }}">{{ user.email }}</a>
+                  </td>
+                  <td data-title="{{ 'Name' | t('useractivity') }}">
+                      {{ user.name }}
+                  </td>
+                  <td data-title="{{ 'Last Login' | t('useractivity') }}">
+                      {{user.lastLoginDate is not null ? user.lastLoginDate|date('m/d/Y h:i:s') : null}}
+                  </td>
+              </tr>
+              {% endfor %}
+          </tbody>
+      </table>
+  {% else %}
+      <p>{{ 'No users.' | t('useractivity') }}</p>
+  {% endif %}
+{% endset %}
