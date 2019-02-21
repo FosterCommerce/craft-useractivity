@@ -1,6 +1,7 @@
 {
   "name": "fostercommerce/user-activity",
   "description": "",
+  "version": "1.0.0",
   "type": "craft-plugin",
   "keywords": [
     "craft",
